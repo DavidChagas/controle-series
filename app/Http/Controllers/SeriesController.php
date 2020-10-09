@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Serie;
+use App\Http\Requests\SeriesFormRequest;
 
 class SeriesController extends Controller{
     public function index(Request $request){
@@ -12,9 +13,11 @@ class SeriesController extends Controller{
     	// $request->query('id') Pega um parametro passado pela url
     	// $request->query()     Pega todos parametros passados pela url
 
-    	$series = Serie::all();
+    	$series = Serie::query()->orderBy('nome')->get();
 
-    	return view('series.index', compact('series'));
+    	$mensagem = $request->session()->get('mensagem');
+
+    	return view('series.index', compact('series', 'mensagem'));
 
     }
 
@@ -22,13 +25,23 @@ class SeriesController extends Controller{
         return view('series.create');
     }
 
-    public function store(Request $request){
+    public function store(SeriesFormRequest $request){
         //$nome = $request->nome;
 
     	// como os campos retornados do all() é igual aos campos do banco não precisa montar a estrutura para salvar
     	// especificar na classe os atributos que o crete poderá receber atraves da variavel $fillable 
         $serie = Serie::create($request->all());
 
-        echo "Série com id {$serie->id} criada: {$serie->nome}";
+        // flash() ao contrario do ´put() guarda essa variavel apenas para uma requisição
+        $request->session()->flash('mensagem', "Série {$serie->nome} adicionada com sucesso!!!");
+
+        return redirect()->route('listar_series');
+    }
+
+    public function destroy(Request $request){
+        $serie = Serie::destroy($request->id);
+
+        $request->session()->flash('mensagem', "Série removida com sucesso!!!");
+        return redirect()->route('listar_series');
     }
 }
