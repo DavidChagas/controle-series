@@ -10,4 +10,10 @@ class Serie extends Model{
     public $timestamps = false;
 
     protected $fillable = ['nome'];
+
+    //as relações das tabelas no laravel são feitas atraves de metodos 
+    public function temporadas(){
+    	//relação de uma serie (this) para muitas temporadas (Temporada::class)
+    	return $this->hasMany(Temporada::class);
+    }
 }

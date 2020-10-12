@@ -1,0 +1,5 @@
+// necesario rodar ao baixar um projeto laravel, para baixar todas as dependencias
+composer install
+
+// criar model (o -m ja cria a migration)
+php artisan make:model Temporada -m
