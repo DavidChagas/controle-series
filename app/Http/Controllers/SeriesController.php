@@ -26,16 +26,24 @@ class SeriesController extends Controller{
     }
 
     public function store(SeriesFormRequest $request){
-        //$nome = $request->nome;
+        // especificar na classe os atributos que o crete poderá receber atraves da variavel $fillable 
+        $serie = Serie::create(['nome' => $request->nome]);
+        
+        // salva no banco já com o relacionamento
+        $qtdTemporadas = $request->qtd_temporadas;
+        for($i = 1; $i <= $qtdTemporadas; $i++) {
+            $temporada = $serie->temporadas()->create(['numero' => $i]);
 
-    	// como os campos retornados do all() é igual aos campos do banco não precisa montar a estrutura para salvar
-    	// especificar na classe os atributos que o crete poderá receber atraves da variavel $fillable 
-        $serie = Serie::create($request->all());
+            for ($j = 1; $j <= $request->ep_por_temporada; $j++) {
+                $temporada->episodios()->create(['numero' => $j]);
+            }
+        }
 
         // flash() ao contrario do ´put() guarda essa variavel apenas para uma requisição
-        $request->session()->flash('mensagem', "Série {$serie->nome} adicionada com sucesso!!!");
+        $request->session()->flash('mensagem', "Série {$serie->nome} e suas temporadas e episódios criados com sucesso!!!");
 
         return redirect()->route('listar_series');
+
     }
 
     public function destroy(Request $request){
