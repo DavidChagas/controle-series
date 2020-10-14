@@ -2,28 +2,37 @@
 namespace App\Services;
 
 use App\Models\{Serie, Temporada, Episodio};
+use Illuminate\Support\Facades\DB;
 
 class RemovedorDeSerie{
 
     public function removerSerie(int $serieId) : string{
-        $serie = Serie::find($serieId);
+        $nome = '';
 
-        $nome = $serie->nome;
+        DB::transaction( function() use ($serieId, &$nome){
 
-        $serie->temporadas->each( function($temporada){
+            $serie = Serie::find($serieId);
 
-            $temporada->episodios->each( function($episodio){
-                $episodio->delete();
-            });
+            $nome = $serie->nome;
 
-            $temporada->delete();
+            $this->removerTemporadas($serie);
+
+            $serie->delete();
         });
 
-        $serie->delete();
-
-        //outra forma de deletar
-        //$serie = Serie::destroy($serieId);
-
         return $nome;
+    }
+
+    private function removerTemporadas(Serie $serie): void{
+        $serie->temporadas->each( function($temporada){
+            $this->removerEpisodios($temporada);
+            $temporada->delete();
+        });
+    }
+
+    private function removerEpisodios(Temporada $temporada): void{
+        $temporada->episodios->each( function($episodio){
+            $episodio->delete();
+        });
     }
 }
