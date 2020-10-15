@@ -2,23 +2,31 @@
 namespace App\Services;
 
 use App\Models\Serie;
+use Illuminate\Support\Facades\DB;
 
 class CriadorDeSerie{
 
-    public function criarSerie(string $nomeSerie, int $qtdTemporada, int $epPorTemporada) : Serie{
-        // especificar na classe os atributos que o crete poderá receber atraves da variavel $fillable 
+    public function criarSerie(string $nomeSerie, int $qtdTemporadas, int $epPorTemporada) : Serie{
+
+        DB::beginTransaction();
         $serie = Serie::create(['nome' => $nomeSerie]);
-
-        // salva no banco já com o relacionamento
-        $qtdTemporadas = $qtdTemporada;
-        for ($i = 0; $i <= $qtdTemporadas; $i++) {
-            $temporada = $serie->temporadas()->create(['numero' => $i]);
-
-            for ($j = 1; $j <= $epPorTemporada; $j++) {
-                $temporada->episodios()->create(['numero' => $j]);
-            }
-        }
+        $this->criaTemporadas($qtdTemporadas, $epPorTemporada, $serie);
+        DB::commit();
 
         return $serie;
+    }
+
+    private function criaTemporadas(int $qtdTemporadas, int $epPorTemporada, Serie $serie): void{
+        for ($i = 1; $i <= $qtdTemporadas; $i++) {
+            $temporada = $serie->temporadas()->create(['numero' => $i]);
+
+            $this->criaEpisodios($epPorTemporada, $temporada);
+        }
+    }
+
+    private function criaEpisodios(int $epPorTemporada, \Illuminate\Database\Eloquent\Model $temporada): void{
+        for ($j = 1; $j <= $epPorTemporada; $j++) {
+            $temporada->episodios()->create(['numero' => $j]);
+        }
     }
 }
