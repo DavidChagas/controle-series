@@ -10,6 +10,10 @@ use App\Services\RemovedorDeSerie;
 use App\Http\Requests\SeriesFormRequest;
 
 class SeriesController extends Controller{
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     public function index(Request $request){
     	// $request->url()   	 Pega a url
     	// $request->query('id') Pega um parametro passado pela url

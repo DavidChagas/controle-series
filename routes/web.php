@@ -25,3 +25,7 @@ Route::get('/series/{serieId}/temporadas', 'App\Http\Controllers\TemporadasContr
 Route::post('/series/{id}/editaNome', 'App\Http\Controllers\SeriesController@editaNome');
 Route::get('/temporadas/{temporada}/episodios', 'App\Http\Controllers\EpisodiosController@index');
 Route::post('/temporadas/{temporada}/episodios/assistir', 'App\Http\Controllers\EpisodiosController@assistir');
+Route::get('/entrar', 'App\Http\Controllers\EntrarController@index');
+Route::post('/entrar', 'App\Http\Controllers\EntrarController@index');
+Route::get('/registrar', 'App\Http\Controllers\RegistroController@create');
+Route::post('/registrar', 'App\Http\Controllers\RegistroController@store');
