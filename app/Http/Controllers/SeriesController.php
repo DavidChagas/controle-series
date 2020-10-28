@@ -37,6 +37,8 @@ class SeriesController extends Controller{
 
         return redirect()->route('listar_series');
 
+        // outra forma mais atual de enviar um retorno 
+        //return redirect()->route('listar_series')->with('sucess', 'Série {$serie->nome} e suas temporadas e episódios criados com sucesso!!!');
     }
 
     public function destroy(Request $request, RemovedorDeSerie $removedorDeSerie){
