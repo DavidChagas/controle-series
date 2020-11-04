@@ -18,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/series', 'App\Http\Controllers\SeriesController@index')->name('listar_series');
+Route::get('/', 'App\Http\Controllers\SeriesController@index')->name('listar_series');
 Route::get('/series/criar', 'App\Http\Controllers\SeriesController@create')->name('form_criar_series')->middleware('autenticador');
 Route::post('/series/criar', 'App\Http\Controllers\SeriesController@store')->middleware('autenticador');
 Route::post('/series/remover/{id}', 'App\Http\Controllers\SeriesController@destroy')->middleware('autenticador');
