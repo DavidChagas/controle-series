@@ -17,7 +17,7 @@
             <a href="/sair" class="text-danger">Sair</a>
         @endauth
         @guest
-            <a href="/entrar">Entrar</a>
+            <a href="/entrar" dusk="link-entrar">Entrar</a>
         @endguest
     </nav>
     <div class="container">
