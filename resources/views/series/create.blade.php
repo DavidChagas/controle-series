@@ -33,6 +33,6 @@
         </div>
 
     </div>
-    <button class="btn btn-primary mt-2">Adicionar</button>
+    <button class="btn btn-primary mt-2" dusk="botao-criar-serie">Adicionar</button>
 </form>
 @endsection
